@@ -1,5 +1,8 @@
 package br.barbertech.gestao.domain.model;
 
+import lombok.Getter;
+
+@Getter
 abstract class Usuario {
 
     private int id;
@@ -14,7 +17,4 @@ abstract class Usuario {
         this.telefone = telefone;
     }
 
-    public void teste(){
-        System.out.println("FUNCIONANDO");
-    }
 }
