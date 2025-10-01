@@ -8,5 +8,13 @@ abstract class Usuario {
     private String telefone;
 
     public Usuario(int id, String nome, String cpf, String telefone) {
+        this.id = id;
+        this.nome = nome;
+        this.cpf = cpf;
+        this.telefone = telefone;
+    }
+
+    public void teste(){
+        System.out.println("FUNCIONANDO");
     }
 }
