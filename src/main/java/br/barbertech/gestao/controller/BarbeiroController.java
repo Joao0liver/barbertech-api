@@ -1,6 +1,6 @@
-package br.barbertech.gestao.api.controller;
+package br.barbertech.gestao.controller;
 
-import br.barbertech.gestao.domain.model.Barbeiro;
+import br.barbertech.gestao.entity.Barbeiro;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 

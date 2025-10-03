@@ -1,4 +1,4 @@
-package br.barbertech.gestao.domain.model;
+package br.barbertech.gestao.entity;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
