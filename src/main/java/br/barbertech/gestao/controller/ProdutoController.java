@@ -42,4 +42,20 @@ public class ProdutoController {
         return ResponseEntity.noContent().build(); // 204
     }
 
+    @PutMapping ("/produtos/{id_produto}")
+    public ResponseEntity<Produto> atualizarProduto(@PathVariable Long id_produto, @RequestBody Produto dto) {
+        return repository.findById(id_produto)
+                .map(produtoExistente -> {
+                    produtoExistente.setNome_produto(dto.getNome_produto());
+                    produtoExistente.setPreco_custo(dto.getPreco_custo());
+                    produtoExistente.setPreco_venda(dto.getPreco_venda());
+                    produtoExistente.setQuantidade(dto.getQuantidade());
+                    produtoExistente.setStatus_produto(1);
+
+                    Produto produtoSalvo = repository.save(produtoExistente);
+                    return ResponseEntity.ok(produtoSalvo);
+                })
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
 }
