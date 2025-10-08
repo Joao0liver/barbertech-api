@@ -1,14 +1,14 @@
 package br.barbertech.gestao.entity;
 
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @EqualsAndHashCode (onlyExplicitlyIncluded = true)
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Produto {
 
     @Id
