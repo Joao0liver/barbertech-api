@@ -15,10 +15,13 @@ public class ServicosController {
     public static void main(String[] args) throws Exception {
         Servicos servico1 = new Servicos();
         servico1.setNome_servico("Corte");
-        servico1.setPreco_c_servico(10.00);
-        servico1.setPreco_v_servico(25.00);
+        servico1.setPreco_c_servico(15.00);
+        servico1.setPreco_v_servico(55.00);
         servico1.setStatus_servico(true);
 
         new ServicoDAO().cadastrarServico(servico1);
+
+        ServicoDAO dao = new ServicoDAO();
+        dao.deletarServicoPorId(1);
     }
 }
