@@ -1,9 +1,11 @@
 package br.barbertech.gestao.entity;
 
-public class Proprietario extends Usuario {
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import jakarta.persistence.MappedSuperclass;
 
-    public Proprietario(int id, String nome, String cpf, String telefone, String senha){
-        super(id, nome, cpf, telefone, senha);
-    }
+@Entity
+@DiscriminatorValue("1")
+public class Proprietario extends Usuario {
 
 }
