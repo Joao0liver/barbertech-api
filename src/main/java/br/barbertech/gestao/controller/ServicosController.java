@@ -1,27 +1,59 @@
-package br.barbertech.gestao.controller;
+package br.barbertech.gestao.controller; // Ajuste o pacote conforme necessário
 
-import br.barbertech.gestao.dto.ServicoDAO;
-import br.barbertech.gestao.entity.Servicos;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import br.barbertech.gestao.entity.Servico;
+import br.barbertech.gestao.repository.ServicoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
+@RequestMapping("/servicos") // Endpoint base para todos os métodos
 public class ServicosController {
 
-    @GetMapping ("/servicos")
-    public static void main(String[] args) throws Exception {
-        Servicos servico1 = new Servicos();
-        servico1.setNome_servico("Corte");
-        servico1.setPreco_c_servico(15.00);
-        servico1.setPreco_v_servico(55.00);
-        servico1.setStatus_servico(true);
+    @Autowired
+    private ServicoRepository repository;
 
-        new ServicoDAO().cadastrarServico(servico1);
+    // (Listar todos)
+    @GetMapping
+    public List<Servico> listar() {
+        return repository.findAll();
+    }
 
-        ServicoDAO dao = new ServicoDAO();
-        dao.deletarServicoPorId(1);
+    // (Cadastrar novo)
+    @PostMapping
+    public ResponseEntity<Servico> cadastrar(@RequestBody Servico novoServico) {
+        Servico servicoSalvo = repository.save(novoServico);
+        // Retorna 200 OK com o objeto salvo.
+        return ResponseEntity.ok(servicoSalvo);
+    }
+
+    // (Deletar por ID)
+    @DeleteMapping("servicos/{id_servico}")
+    public ResponseEntity<Void> deletarServico(@PathVariable Long id_servico) {
+        if (!repository.existsById(id_servico)) {
+            return ResponseEntity.notFound().build(); // 404
+        }
+
+        repository.deleteById(id_servico);
+        return ResponseEntity.noContent().build(); // 204 No Content
+    }
+
+    // (Atualizar por ID)
+    @PutMapping("/{id_servico}")
+    public ResponseEntity<Servico> atualizarServico(@PathVariable Long id_servico, @RequestBody Servico dto) {
+        return repository.findById(id_servico)
+                .map(servicoExistente -> {
+                    // Atualiza apenas os campos que podem ser modificados
+                    servicoExistente.setNome_servico(dto.getNome_servico());
+                    servicoExistente.setPreco_custo(dto.getPreco_custo());
+                    servicoExistente.setPreco_venda(dto.getPreco_venda());
+                    servicoExistente.setStatus_servico(dto.getStatus_servico());
+
+                    Servico servicoSalvo = repository.save(servicoExistente);
+                    return ResponseEntity.ok(servicoSalvo); // 200 OK
+                })
+                .orElseGet(() -> ResponseEntity.notFound().build()); // 404 Not Found
     }
 }

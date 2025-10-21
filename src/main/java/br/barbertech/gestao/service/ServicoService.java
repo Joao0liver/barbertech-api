@@ -1,12 +1,12 @@
 package br.barbertech.gestao.service;
 
-import br.barbertech.gestao.entity.Servicos;
+import br.barbertech.gestao.entity.Servico;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ServicoService {
 
-    public Servicos cadastrarServico(Servicos servicos){
+    public Servico cadastrarServico(Servico servicos){
         return null;
     }
 
