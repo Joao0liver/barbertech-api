@@ -39,7 +39,7 @@ public class ServicosController {
     }
 
     // (Deletar por ID)
-    @DeleteMapping("servicos/{id_servico}")
+    @DeleteMapping("/{id_servico}")
     public ResponseEntity<Void> deletarServico(@PathVariable Long id_servico) {
         if (!repository.existsById(id_servico)) {
             return ResponseEntity.notFound().build(); // retorna erro se não existir o id
@@ -58,7 +58,7 @@ public class ServicosController {
                     servicoExistente.setNome_servico(dto.getNome_servico());
                     servicoExistente.setPreco_custo(dto.getPreco_custo());
                     servicoExistente.setPreco_venda(dto.getPreco_venda());
-                    servicoExistente.setStatus_servico(dto.getStatus_servico());
+                    servicoExistente.setStatus_servico(true);
 
                     Servico servicoSalvo = repository.save(servicoExistente);
                     return ResponseEntity.ok(servicoSalvo); // 200 OK
