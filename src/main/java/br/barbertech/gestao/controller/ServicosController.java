@@ -5,6 +5,8 @@ import br.barbertech.gestao.repository.ServicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus; // Para carregar uma resposta mais direta na consulta
+
 
 import java.util.List;
 
@@ -23,21 +25,28 @@ public class ServicosController {
 
     // (Cadastrar novo)
     @PostMapping
-    public ResponseEntity<Servico> cadastrar(@RequestBody Servico novoServico) {
-        Servico servicoSalvo = repository.save(novoServico);
-        // Retorna 200 OK com o objeto salvo.
-        return ResponseEntity.ok(servicoSalvo);
+    public ResponseEntity<String> cadastrar(@RequestBody Servico novoServico) { // String é para momstrar a mensagem *
+        // * (Se necessário, mudar para Servico - que relaciona o objeto)
+
+        //Antigo modelo que cadastrava
+        //Servico servicoSalvo = repository.save(novoServico);
+        //return ResponseEntity.ok(servicoSalvo);
+
+        // Novo modelo para mostrar mensagem
+        repository.save(novoServico);
+        String mensagemCadastrado = "Serviço cadastrado com sucesso!";
+        return new ResponseEntity<>(mensagemCadastrado, HttpStatus.CREATED);
     }
 
     // (Deletar por ID)
     @DeleteMapping("servicos/{id_servico}")
     public ResponseEntity<Void> deletarServico(@PathVariable Long id_servico) {
         if (!repository.existsById(id_servico)) {
-            return ResponseEntity.notFound().build(); // 404
+            return ResponseEntity.notFound().build(); // retorna erro se não existir o id
         }
 
         repository.deleteById(id_servico);
-        return ResponseEntity.noContent().build(); // 204 No Content
+        return ResponseEntity.noContent().build(); // retorna 200
     }
 
     // (Atualizar por ID)
