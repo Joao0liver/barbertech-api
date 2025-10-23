@@ -32,7 +32,7 @@ public class ProprietarioController {
         return ResponseEntity.ok(proprietarioSalvo);
     }
 
-    @DeleteMapping("/proprietarios/{id_usuario}")
+    @DeleteMapping ("/proprietarios/{id_usuario}")
     public ResponseEntity<Void> deletar(@PathVariable Long id_usuario) {
         if (!repository.existsById(id_usuario)){
             return ResponseEntity.notFound().build();
@@ -40,6 +40,22 @@ public class ProprietarioController {
 
         repository.deleteById(id_usuario);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping ("/proprietarios/{id_usuario}")
+    public ResponseEntity<Proprietario> editar(@PathVariable Long id_usuario, @RequestBody Proprietario dto) {
+        return repository.findById(id_usuario)
+                .map(proprietarioExistente -> {
+                    proprietarioExistente.setNome_usuario(dto.getNome_usuario());
+                    proprietarioExistente.setCpf_usuario(dto.getCpf_usuario());
+                    proprietarioExistente.setTelefone(dto.getTelefone());
+                    proprietarioExistente.setSenha(dto.getSenha());
+                    proprietarioExistente.setStatus_usuario(1);
+
+                    Proprietario proprietarioSalvo = repository.save(proprietarioExistente);
+                    return ResponseEntity.ok(proprietarioSalvo);
+                })
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
 }
