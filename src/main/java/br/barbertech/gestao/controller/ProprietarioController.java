@@ -13,16 +13,13 @@ import java.util.List;
 @RestController
 public class ProprietarioController {
 
-    @PersistenceContext
-    private EntityManager manager;
-
     @Autowired
     private ProprietarioRepository repository;
 
     @GetMapping ("/proprietarios")
     public List<Proprietario> listar() {
 
-        return manager.createQuery("from Proprietario",Proprietario.class).getResultList();
+        return repository.findAll();
 
     }
 
