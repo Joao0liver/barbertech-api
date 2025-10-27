@@ -2,19 +2,15 @@ package br.barbertech.gestao.controller;
 
 import br.barbertech.gestao.entity.Proprietario;
 import br.barbertech.gestao.repository.ProprietarioRepository;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class ProprietarioController {
-
-    @PersistenceContext
-    private EntityManager manager;
 
     @Autowired
     private ProprietarioRepository repository;
@@ -22,7 +18,27 @@ public class ProprietarioController {
     @GetMapping ("/proprietarios")
     public List<Proprietario> listar() {
 
-        return manager.createQuery("from Proprietario",Proprietario.class).getResultList();
+        return repository.findAll();
+
+    }
+
+    @GetMapping ("/proprietarios/nome/{nome_usuario}")
+    public List<Proprietario> buscarNome(@PathVariable String nome_usuario) {
+
+        return repository.findByNomeUsuarioContaining(nome_usuario);
+
+    }
+
+    @GetMapping ("/proprietarios/id/{id_usuario}")
+    public ResponseEntity<Proprietario> buscarId(@PathVariable Long id_usuario){
+
+        Optional<Proprietario> proprietario = repository.findById(id_usuario);
+
+        if (proprietario.isPresent()) {
+            return ResponseEntity.ok(proprietario.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
 
     }
 
@@ -46,7 +62,7 @@ public class ProprietarioController {
     public ResponseEntity<Proprietario> editar(@PathVariable Long id_usuario, @RequestBody Proprietario dto) {
         return repository.findById(id_usuario)
                 .map(proprietarioExistente -> {
-                    proprietarioExistente.setNome_usuario(dto.getNome_usuario());
+                    proprietarioExistente.setNomeUsuario(dto.getNomeUsuario());
                     proprietarioExistente.setCpf_usuario(dto.getCpf_usuario());
                     proprietarioExistente.setTelefone(dto.getTelefone());
                     proprietarioExistente.setSenha(dto.getSenha());

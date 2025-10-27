@@ -18,7 +18,7 @@ abstract class Usuario {
     @EqualsAndHashCode.Include
     private int id_usuario;
 
-    private String nome_usuario;
+    private String nomeUsuario;
 
     private String cpf_usuario;
 
