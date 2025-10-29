@@ -1,5 +1,6 @@
 package br.barbertech.gestao.controller;
 
+import br.barbertech.gestao.dto.ProprietarioDto;
 import br.barbertech.gestao.entity.Proprietario;
 import br.barbertech.gestao.repository.ProprietarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,13 +60,13 @@ public class ProprietarioController {
     }
 
     @PutMapping ("/proprietarios/{id_usuario}")
-    public ResponseEntity<Proprietario> editar(@PathVariable Long id_usuario, @RequestBody Proprietario dto) {
+    public ResponseEntity<Proprietario> editar(@PathVariable Long id_usuario, @RequestBody ProprietarioDto dto) {
         return repository.findById(id_usuario)
                 .map(proprietarioExistente -> {
-                    proprietarioExistente.setNomeUsuario(dto.getNomeUsuario());
-                    proprietarioExistente.setCpf_usuario(dto.getCpf_usuario());
-                    proprietarioExistente.setTelefone(dto.getTelefone());
-                    proprietarioExistente.setSenha(dto.getSenha());
+                    proprietarioExistente.setNomeUsuario(dto.nomeUsuario());
+                    proprietarioExistente.setCpf_usuario(dto.cpf_usuario());
+                    proprietarioExistente.setTelefone(dto.telefone());
+                    proprietarioExistente.setSenha(dto.senha());
                     proprietarioExistente.setStatus_usuario(1);
 
                     Proprietario proprietarioSalvo = repository.save(proprietarioExistente);
