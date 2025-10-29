@@ -13,10 +13,7 @@ public class BarbeiroController {
     @GetMapping ("/barbeiros")
     public List<Barbeiro> listar(){
 
-        var barbeiro1 = new Barbeiro(1, "Júnior", "12345678901", "1186532764", "teste");
-        var barbeiro2 = new Barbeiro(2, "Felipe", "12345678910", "35985267492", "teste");
-
-        return Arrays.asList(barbeiro1, barbeiro2);
+        return null;
 
     }
 
