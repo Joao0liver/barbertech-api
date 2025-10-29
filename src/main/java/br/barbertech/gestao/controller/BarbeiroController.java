@@ -1,6 +1,8 @@
 package br.barbertech.gestao.controller;
 
 import br.barbertech.gestao.entity.Barbeiro;
+import br.barbertech.gestao.repository.BarbeiroRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,14 +12,17 @@ import java.util.List;
 @RestController
 public class BarbeiroController {
 
+    @Autowired
+    private BarbeiroRepository repository;
+
     @GetMapping("/barbeiros")
     public List<Barbeiro> listar() {
 
-        return manager.createQuery("from Barbeiro", Barbeiro.class).getResultList();
+        return repository.findAll();
 
     }
 
-    @PostMapping
+    @PostMapping("/cadastrar-barbeiros")
     public ResponseEntity<Barbeiro> cadastrar(@RequestBody Barbeiro novoBarbeiro) {
         Barbeiro barbeiroSalvo = repository.save(novoBarbeiro);
         return ResponseEntity.ok(barbeiroSalvo);
@@ -33,7 +38,7 @@ public class BarbeiroController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/Barbeiro/{id_usuario}")
+    @PutMapping("/barbeiro/{id_usuario}")
     public ResponseEntity<Barbeiro> editar(@PathVariable Long id_usuario, @RequestBody Barbeiro dto) {
         return repository.findById(id_usuario)
                 .map(barbeiroExistente -> {
