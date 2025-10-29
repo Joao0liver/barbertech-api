@@ -1,5 +1,6 @@
 package br.barbertech.gestao.controller; // Ajuste o pacote conforme necessário
 
+import br.barbertech.gestao.dto.ServicoAtualizarDTO;
 import br.barbertech.gestao.entity.Servico;
 import br.barbertech.gestao.repository.ServicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +18,11 @@ public class ServicosController {
     @Autowired
     private ServicoRepository repository;
 
-    // Listar todos
-    @GetMapping
-    public List<Servico> listar() {
-        return repository.findAll();
-    }
+//    // Listar todos
+//    @GetMapping
+//    public List<Servico> listar() {
+//        return repository.findAll();
+//    }
 
     // Listar 1 registro específico
     @GetMapping("/{id_servico}")
@@ -29,6 +30,32 @@ public class ServicosController {
         return repository.findById(id_servico)
                 .map(servico -> ResponseEntity.ok(servico))
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    // Lista por nome buscado
+    @GetMapping
+    public ResponseEntity<?> buscarServicos(
+            @RequestParam(required = false) String nome) {
+
+        List<Servico> servicos;
+
+        if (nome!=null && !nome.trim().isEmpty()) {
+            servicos = repository.findByNomeServico(nome);
+        } else {
+
+            String mensagemErro = "O parâmetro 'nome' é obrigatório para realizar a pesquisa.";
+
+            // Retorna o Status 400 com a mensagem no corpo da resposta
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(mensagemErro);
+        }
+
+        if (servicos.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok(servicos);
     }
 
     // Cadastrar novo
@@ -59,14 +86,14 @@ public class ServicosController {
 
     // Atualizar por ID
     @PutMapping("/{id_servico}")
-    public ResponseEntity<Servico> atualizarServico(@PathVariable Long id_servico, @RequestBody Servico dto) {
+    public ResponseEntity<Servico> atualizarServico(@PathVariable Long id_servico, @RequestBody ServicoAtualizarDTO dto) {
         return repository.findById(id_servico)
                 .map(servicoExistente -> {
                     // Atualiza apenas os campos que podem ser modificados
-                    servicoExistente.toString(dto.getNome_servico());
-                    servicoExistente.set_Preco_custo(dto.getPreco_custo());
-                    servicoExistente.setPreco_venda(dto.getPreco_venda());
-                    servicoExistente.setStatus_servico(true);
+                    servicoExistente.setNomeServico(dto.getNomeServico());
+                    servicoExistente.setPrecoCusto(dto.getPrecoCusto());
+                    servicoExistente.setPrecoVenda(dto.getPrecoVenda());
+                    servicoExistente.setStatusServico(dto.isStatusServico());
 
                     Servico servicoSalvo = repository.save(servicoExistente);
                     return ResponseEntity.ok(servicoSalvo); // 200 OK
