@@ -44,7 +44,14 @@ public class ProprietarioController {
     }
 
     @PostMapping ("/cadastrar-proprietario")
-    public ResponseEntity<Proprietario> cadastrar(@RequestBody Proprietario novoProprietario) {
+    public ResponseEntity<Proprietario> cadastrar(@RequestBody ProprietarioDto dto) {
+        Proprietario novoProprietario = new Proprietario();
+
+        novoProprietario.setNomeUsuario(dto.nomeUsuario());
+        novoProprietario.setCpf_usuario(dto.cpf_usuario());
+        novoProprietario.setTelefone(dto.telefone());
+        novoProprietario.setSenha(dto.senha());
+
         Proprietario proprietarioSalvo = repository.save(novoProprietario);
         return ResponseEntity.ok(proprietarioSalvo);
     }
