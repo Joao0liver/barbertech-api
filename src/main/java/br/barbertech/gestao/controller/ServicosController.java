@@ -17,13 +17,13 @@ public class ServicosController {
     @Autowired
     private ServicoRepository repository;
 
-    // (Listar todos)
+    // Listar todos
     @GetMapping
     public List<Servico> listar() {
         return repository.findAll();
     }
 
-    // Listar 1 registro específico:
+    // Listar 1 registro específico
     @GetMapping("/{id_servico}")
     public ResponseEntity<Servico> getServicoPorId(@PathVariable Long id_servico) {
         return repository.findById(id_servico)
@@ -31,7 +31,7 @@ public class ServicosController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // (Cadastrar novo)
+    // Cadastrar novo
     @PostMapping ("/cadastrar-servico")
     public ResponseEntity<String> cadastrar(@RequestBody Servico novoServico) { // String é para momstrar a mensagem *
         // * (Se necessário, mudar para Servico - que relaciona o objeto)
@@ -46,7 +46,7 @@ public class ServicosController {
         return new ResponseEntity<>(mensagemCadastrado, HttpStatus.CREATED);
     }
 
-    // (Deletar por ID)
+    // Deletar por ID
     @DeleteMapping("/{id_servico}")
     public ResponseEntity<Void> deletarServico(@PathVariable Long id_servico) {
         if (!repository.existsById(id_servico)) {
@@ -57,7 +57,7 @@ public class ServicosController {
         return ResponseEntity.noContent().build(); // retorna 200
     }
 
-    // (Atualizar por ID)
+    // Atualizar por ID
     @PutMapping("/{id_servico}")
     public ResponseEntity<Servico> atualizarServico(@PathVariable Long id_servico, @RequestBody Servico dto) {
         return repository.findById(id_servico)
