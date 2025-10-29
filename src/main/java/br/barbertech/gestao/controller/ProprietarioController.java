@@ -11,26 +11,27 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/proprietarios")
 public class ProprietarioController {
 
     @Autowired
     private ProprietarioRepository repository;
 
-    @GetMapping ("/proprietarios")
+    @GetMapping
     public List<Proprietario> listar() {
 
         return repository.findAll();
 
     }
 
-    @GetMapping ("/proprietarios/nome/{nomeUsuario}")
+    @GetMapping("/nome/{nomeUsuario}")
     public List<Proprietario> buscarNome(@PathVariable String nomeUsuario) {
 
         return repository.findByNomeUsuarioContaining(nomeUsuario);
 
     }
 
-    @GetMapping ("/proprietarios/id/{idUsuario}")
+    @GetMapping("/id/{idUsuario}")
     public ResponseEntity<Proprietario> buscarId(@PathVariable Long idUsuario){
 
         Optional<Proprietario> proprietario = repository.findById(idUsuario);
@@ -43,7 +44,7 @@ public class ProprietarioController {
 
     }
 
-    @PostMapping ("/cadastrar-proprietario")
+    @PostMapping
     public ResponseEntity<Proprietario> cadastrar(@RequestBody ProprietarioDto dto) {
         Proprietario novoProprietario = new Proprietario();
 
@@ -56,7 +57,7 @@ public class ProprietarioController {
         return ResponseEntity.ok(proprietarioSalvo);
     }
 
-    @DeleteMapping ("/proprietarios/{idUsuario}")
+    @DeleteMapping("/{idUsuario}")
     public ResponseEntity<Void> deletar(@PathVariable Long idUsuario) {
         if (!repository.existsById(idUsuario)){
             return ResponseEntity.notFound().build();
@@ -66,7 +67,7 @@ public class ProprietarioController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping ("/proprietarios/{idUsuario}")
+    @PutMapping("/{idUsuario}")
     public ResponseEntity<Proprietario> editar(@PathVariable Long idUsuario, @RequestBody ProprietarioDto dto) {
         return repository.findById(idUsuario)
                 .map(proprietarioExistente -> {
