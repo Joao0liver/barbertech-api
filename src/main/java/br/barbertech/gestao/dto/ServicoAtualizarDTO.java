@@ -1,4 +1,11 @@
 package br.barbertech.gestao.dto;
 
-public class ServicoAtualizar {
+import lombok.Data;
+
+@Data
+public class ServicoAtualizarDTO {
+    private String nomeServico;
+    private double precoCusto;
+    private double precoVenda;
+    private boolean statusServico;
 }
