@@ -23,8 +23,16 @@ public class ServicosController {
         return repository.findAll();
     }
 
+    // Listar 1 registro específico:
+    @GetMapping("/{id_servico}")
+    public ResponseEntity<Servico> getServicoPorId(@PathVariable Long id_servico) {
+        return repository.findById(id_servico)
+                .map(servico -> ResponseEntity.ok(servico))
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
     // (Cadastrar novo)
-    @PostMapping
+    @PostMapping ("/cadastrar-servico")
     public ResponseEntity<String> cadastrar(@RequestBody Servico novoServico) { // String é para momstrar a mensagem *
         // * (Se necessário, mudar para Servico - que relaciona o objeto)
 
@@ -55,8 +63,8 @@ public class ServicosController {
         return repository.findById(id_servico)
                 .map(servicoExistente -> {
                     // Atualiza apenas os campos que podem ser modificados
-                    servicoExistente.setNome_servico(dto.getNome_servico());
-                    servicoExistente.setPreco_custo(dto.getPreco_custo());
+                    servicoExistente.toString(dto.getNome_servico());
+                    servicoExistente.set_Preco_custo(dto.getPreco_custo());
                     servicoExistente.setPreco_venda(dto.getPreco_venda());
                     servicoExistente.setStatus_servico(dto.getStatus_servico());
 
