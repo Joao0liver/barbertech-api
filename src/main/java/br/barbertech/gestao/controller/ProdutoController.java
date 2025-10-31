@@ -10,13 +10,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/produtos")
 public class ProdutoController {
-
-    @PersistenceContext
-    private EntityManager manager;
 
     @Autowired
     private ProdutoRepository repository;
@@ -24,7 +22,21 @@ public class ProdutoController {
     @GetMapping
     public List<Produto> listar() {
 
-        return manager.createQuery("from Produto",Produto.class).getResultList();
+        return repository.findAll();
+
+    }
+    
+    @GetMapping("/id/{idProduto}")
+    public Optional<Produto> listarId(@PathVariable Long idProduto) {
+        
+        return repository.findById(idProduto);
+        
+    }
+
+    @GetMapping("/nome/{nomeProduto}")
+    public List<Produto> listarNome(@PathVariable String nomeProduto) {
+
+        return repository.findByNomeProdutoContaining(nomeProduto);
 
     }
 
@@ -41,17 +53,17 @@ public class ProdutoController {
         return ResponseEntity.ok(produtoSalvo);
     }
 
-    @DeleteMapping("/{id_produto}")
-    public ResponseEntity<Void> deletarProduto(@PathVariable Long id_produto) {
-        if (!repository.existsById(id_produto)) {
+    @DeleteMapping("/{idProduto}")
+    public ResponseEntity<Void> deletarProduto(@PathVariable Long idProduto) {
+        if (!repository.existsById(idProduto)) {
             return ResponseEntity.notFound().build();
         }
 
-        repository.deleteById(id_produto);
+        repository.deleteById(idProduto);
         return ResponseEntity.noContent().build(); // 204
     }
 
-    @PutMapping ("/{id_produto}")
+    @PutMapping ("/{idProduto}")
     public ResponseEntity<Produto> atualizarProduto(@PathVariable Long idProduto, @RequestBody ProdutoDto dto) {
         return repository.findById(idProduto)
                 .map(produtoExistente -> {
