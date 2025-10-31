@@ -74,18 +74,18 @@ public class Servico {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
-    private Long id_servico; // Tipo 'id' (usando Long para o ID)
+    private Long idServico; // Tipo 'id' (usando Long para o ID)
 
-    private String nome_servico; // Tipo 'String'
+    private String nomeServico; // Tipo 'String'
 
     @Column(name = "preco_c_servico")
-    private double preco_custo; // Tipo 'double'
+    private double precoCusto; // Tipo 'double'
 
     @Column(name = "preco_v_servico")
-    private double preco_venda; // Tipo 'double'
+    private double precoVenda; // Tipo 'double'
 
     @Column(name = "status_servico")
-    private Boolean status_servico; // Tipo 'boolean'
+    private Boolean statusServico; // Tipo 'boolean'
 
     /**
         Fixa o valor TRUE (ativo) antes de a persistência ocorrer.
@@ -93,8 +93,8 @@ public class Servico {
      */
     @PrePersist
     public void prePersist() {
-        if (status_servico == null) {
-            status_servico = true;
+        if (statusServico == null) {
+            statusServico = true;
         }
     }
 
