@@ -42,10 +42,10 @@ public class BarbeiroController {
     public ResponseEntity<Barbeiro> editar(@PathVariable Long id_usuario, @RequestBody Barbeiro dto) {
         return repository.findById(id_usuario)
                 .map(barbeiroExistente -> {
-                    barbeiroExistente.setNome_usuario(dto.getNome_usuario());
-                    barbeiroExistente.setCpf_usuario(dto.getCpf_usuario());
-                    barbeiroExistente.setTelefone(dto.getTelefone());
-                    barbeiroExistente.setSenha(dto.getSenha());
+                    barbeiroExistente.setNome_usuario(dto.nomeUsuario());
+                    barbeiroExistente.setCpf_usuario(dto.cpfUsuario());
+                    barbeiroExistente.setTelefone(dto.telefone());
+                    barbeiroExistente.setSenha(dto.senha());
                     barbeiroExistente.setStatus_usuario(1);
 
                     Barbeiro BarbeiroSalvo = repository.save(barbeiroExistente);
