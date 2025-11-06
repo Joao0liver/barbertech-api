@@ -29,12 +29,12 @@ public class BarbeiroController {
     }
 
     @DeleteMapping("/barbeiros/{id_usuario}")
-    public ResponseEntity<Void> deletar(@PathVariable Long id_usuario) {
-        if (!repository.existsById(id_usuario)) {
+    public ResponseEntity<Void> deletar(@PathVariable Long idUsuario) {
+        if (!repository.existsById(idUsuario)) {
             return ResponseEntity.notFound().build();
         }
 
-        repository.deleteById(id_usuario);
+        repository.deleteById(idUsuario);
         return ResponseEntity.noContent().build();
     }
 
@@ -42,10 +42,10 @@ public class BarbeiroController {
     public ResponseEntity<Barbeiro> editar(@PathVariable Long id_usuario, @RequestBody Barbeiro dto) {
         return repository.findById(id_usuario)
                 .map(barbeiroExistente -> {
-                    barbeiroExistente.setNomeUsuario(dto.nomeUsuario());
-                    barbeiroExistente.setCpfUsuario(dto.cpfUsuario());
+                    barbeiroExistente.setNomeUsuario(dto.NomeUsuario());
+                    barbeiroExistente.setCpfUsuario(dto.CpfUsuario());
                     barbeiroExistente.setTelefone(dto.telefone());
-                    barbeiroExistente.setSenha(dto.senha());
+                    barbeiroExistente.setSenha(dto.Senha());
                     barbeiroExistente.setStatusUsuario(0);
 
                     Barbeiro BarbeiroSalvo = repository.save(barbeiroExistente);
