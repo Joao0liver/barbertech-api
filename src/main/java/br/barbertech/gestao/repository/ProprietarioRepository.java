@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface ProprietarioRepository extends JpaRepository<Proprietario, Long> {
 
-    List<Proprietario> findByNomeUsuarioContaining(String nome_usuario);
+    List<Proprietario> findByNomeUsuarioContaining(String nomeUsuario);
 
 }
