@@ -1,5 +1,6 @@
 package br.barbertech.gestao.controller; // Ajuste o pacote conforme necessário
 
+import br.barbertech.gestao.dto.ServicoAtualizarDTO;
 import br.barbertech.gestao.entity.Servico;
 import br.barbertech.gestao.repository.ServicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,14 +18,48 @@ public class ServicosController {
     @Autowired
     private ServicoRepository repository;
 
-    // (Listar todos)
-    @GetMapping
-    public List<Servico> listar() {
-        return repository.findAll();
+//    // Listar todos
+//    @GetMapping
+//    public List<Servico> listar() {
+//        return repository.findAll();
+//    }
+
+    // Listar 1 registro específico
+    @GetMapping("/{id_servico}")
+    public ResponseEntity<Servico> getServicoPorId(@PathVariable Long id_servico) {
+        return repository.findById(id_servico)
+                .map(servico -> ResponseEntity.ok(servico))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // (Cadastrar novo)
-    @PostMapping
+    // Lista por nome buscado
+    @GetMapping
+    public ResponseEntity<?> buscarServicos(
+            @RequestParam(required = false) String nome) {
+
+        List<Servico> servicos;
+
+        if (nome!=null && !nome.trim().isEmpty()) {
+            servicos = repository.findByNomeServico(nome);
+        } else {
+
+            String mensagemErro = "O parâmetro 'nome' é obrigatório para realizar a pesquisa.";
+
+            // Retorna o Status 400 com a mensagem no corpo da resposta
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(mensagemErro);
+        }
+
+        if (servicos.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok(servicos);
+    }
+
+    // Cadastrar novo
+    @PostMapping ("/cadastrar-servico")
     public ResponseEntity<String> cadastrar(@RequestBody Servico novoServico) { // String é para momstrar a mensagem *
         // * (Se necessário, mudar para Servico - que relaciona o objeto)
 
@@ -38,7 +73,7 @@ public class ServicosController {
         return new ResponseEntity<>(mensagemCadastrado, HttpStatus.CREATED);
     }
 
-    // (Deletar por ID)
+    // Deletar por ID
     @DeleteMapping("/{id_servico}")
     public ResponseEntity<Void> deletarServico(@PathVariable Long id_servico) {
         if (!repository.existsById(id_servico)) {
@@ -49,16 +84,16 @@ public class ServicosController {
         return ResponseEntity.noContent().build(); // retorna 200
     }
 
-    // (Atualizar por ID)
+    // Atualizar por ID
     @PutMapping("/{id_servico}")
-    public ResponseEntity<Servico> atualizarServico(@PathVariable Long id_servico, @RequestBody Servico dto) {
+    public ResponseEntity<Servico> atualizarServico(@PathVariable Long id_servico, @RequestBody ServicoAtualizarDTO dto) {
         return repository.findById(id_servico)
                 .map(servicoExistente -> {
                     // Atualiza apenas os campos que podem ser modificados
-                    servicoExistente.setNome_servico(dto.getNome_servico());
-                    servicoExistente.setPreco_custo(dto.getPreco_custo());
-                    servicoExistente.setPreco_venda(dto.getPreco_venda());
-                    servicoExistente.setStatus_servico(true);
+                    servicoExistente.setNomeServico(dto.getNomeServico());
+                    servicoExistente.setPrecoCusto(dto.getPrecoCusto());
+                    servicoExistente.setPrecoVenda(dto.getPrecoVenda());
+                    servicoExistente.setStatusServico(dto.isStatusServico());
 
                     Servico servicoSalvo = repository.save(servicoExistente);
                     return ResponseEntity.ok(servicoSalvo); // 200 OK

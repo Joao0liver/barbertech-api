@@ -16,6 +16,7 @@ abstract class Usuario {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
+    @Column (name = "id_usuario")
     private int idUsuario;
 
     @Column (name = "nome_usuario")

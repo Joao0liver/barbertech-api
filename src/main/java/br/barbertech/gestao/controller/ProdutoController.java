@@ -1,5 +1,6 @@
 package br.barbertech.gestao.controller;
 
+import br.barbertech.gestao.dto.ProdutoDto;
 import br.barbertech.gestao.entity.Produto;
 import br.barbertech.gestao.repository.ProdutoRepository;
 import jakarta.persistence.EntityManager;
@@ -9,48 +10,68 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
+@RequestMapping("/produtos")
 public class ProdutoController {
-
-    @PersistenceContext
-    private EntityManager manager;
 
     @Autowired
     private ProdutoRepository repository;
 
-    @GetMapping ("/produtos")
+    @GetMapping
     public List<Produto> listar() {
 
-        return manager.createQuery("from Produto",Produto.class).getResultList();
+        return repository.findAll();
+
+    }
+    
+    @GetMapping("/id/{idProduto}")
+    public Optional<Produto> listarId(@PathVariable Long idProduto) {
+        
+        return repository.findById(idProduto);
+        
+    }
+
+    @GetMapping("/nome/{nomeProduto}")
+    public List<Produto> listarNome(@PathVariable String nomeProduto) {
+
+        return repository.findByNomeProdutoContaining(nomeProduto);
 
     }
 
-    @PostMapping ("/cadastrar-produto")
-    public ResponseEntity<Produto> cadastrar(@RequestBody Produto novoProduto) {
+    @PostMapping
+    public ResponseEntity<Produto> cadastrar(@RequestBody ProdutoDto dto) {
+        Produto novoProduto = new Produto();
+
+        novoProduto.setNomeProduto(dto.nomeProduto());
+        novoProduto.setPrecoCusto(dto.precoCusto());
+        novoProduto.setPrecoVenda(dto.precoVenda());
+        novoProduto.setQuantidade(dto.quantidade());
+
         Produto produtoSalvo = repository.save(novoProduto);
         return ResponseEntity.ok(produtoSalvo);
     }
 
-    @DeleteMapping("/produtos/{id_produto}")
-    public ResponseEntity<Void> deletarProduto(@PathVariable Long id_produto) {
-        if (!repository.existsById(id_produto)) {
+    @DeleteMapping("/{idProduto}")
+    public ResponseEntity<Void> deletarProduto(@PathVariable Long idProduto) {
+        if (!repository.existsById(idProduto)) {
             return ResponseEntity.notFound().build();
         }
 
-        repository.deleteById(id_produto);
+        repository.deleteById(idProduto);
         return ResponseEntity.noContent().build(); // 204
     }
 
-    @PutMapping ("/produtos/{id_produto}")
-    public ResponseEntity<Produto> atualizarProduto(@PathVariable Long id_produto, @RequestBody Produto dto) {
-        return repository.findById(id_produto)
+    @PutMapping ("/{idProduto}")
+    public ResponseEntity<Produto> atualizarProduto(@PathVariable Long idProduto, @RequestBody ProdutoDto dto) {
+        return repository.findById(idProduto)
                 .map(produtoExistente -> {
-                    produtoExistente.setNome_produto(dto.getNome_produto());
-                    produtoExistente.setPreco_custo(dto.getPreco_custo());
-                    produtoExistente.setPreco_venda(dto.getPreco_venda());
-                    produtoExistente.setQuantidade(dto.getQuantidade());
-                    produtoExistente.setStatus_produto(1);
+                    produtoExistente.setNomeProduto(dto.nomeProduto());
+                    produtoExistente.setPrecoCusto(dto.precoCusto());
+                    produtoExistente.setPrecoVenda(dto.precoVenda());
+                    produtoExistente.setQuantidade(dto.quantidade());
+                    produtoExistente.setStatusProduto(1);
 
                     Produto produtoSalvo = repository.save(produtoExistente);
                     return ResponseEntity.ok(produtoSalvo);
