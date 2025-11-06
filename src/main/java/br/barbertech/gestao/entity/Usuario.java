@@ -16,11 +16,11 @@ abstract class Usuario {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
-    private int id_usuario;
+    private int idUsuario;
 
-    private String nome_usuario;
+    private String nomeUsuario;
 
-    private String cpf_usuario;
+    private String cpfUsuario;
 
     @Column (name = "tel_usuario")
     private String telefone;
@@ -30,12 +30,12 @@ abstract class Usuario {
     @Column(name = "nivel", insertable = false, updatable = false)
     private int nivel;
 
-    private Integer status_usuario;
+    private Integer statusUsuario;
 
     @PrePersist
     public void prePersist() {
-        if (status_usuario == null) {
-            status_usuario = 1;
+        if (statusUsuario == null) {
+            statusUsuario = 1;
         }
     }
 

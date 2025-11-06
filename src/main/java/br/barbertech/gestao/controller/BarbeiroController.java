@@ -1,5 +1,6 @@
 package br.barbertech.gestao.controller;
 
+import br.barbertech.gestao.dto.BarbeiroDto;
 import br.barbertech.gestao.entity.Barbeiro;
 import br.barbertech.gestao.repository.BarbeiroRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,7 @@ public class BarbeiroController {
     }
 
     @PutMapping("/barbeiro/{idUsuario}")
-    public ResponseEntity<Barbeiro> editar(@PathVariable Long idUsuario, @RequestBody Barbeiro dto) {
+    public ResponseEntity<Barbeiro> editar(@PathVariable Long idUsuario, @RequestBody BarbeiroDto dto) {
         return repository.findById(idUsuario)
                 .map(barbeiroExistente -> {
                     barbeiroExistente.setNomeUsuario(dto.nomeUsuario());
