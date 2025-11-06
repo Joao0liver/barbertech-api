@@ -1,6 +1,6 @@
 package br.barbertech.gestao.controller; // Ajuste o pacote conforme necessário
 
-import br.barbertech.gestao.dto.ServicoAtualizarDTO;
+import br.barbertech.gestao.dto.ServicoDTO;
 import br.barbertech.gestao.entity.Servico;
 import br.barbertech.gestao.repository.ServicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus; // Para carregar uma resposta mais d
 
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/servicos") // Endpoint base para todos os métodos
@@ -18,22 +19,20 @@ public class ServicosController {
     @Autowired
     private ServicoRepository repository;
 
-//    // Listar todos
-//    @GetMapping
-//    public List<Servico> listar() {
-//        return repository.findAll();
-//    }
+    // Listar todos
+    @GetMapping ("")
+    public List<Servico> listar() {
+        return repository.findAll();
+    }
 
     // Listar 1 registro específico
     @GetMapping("/{id_servico}")
-    public ResponseEntity<Servico> getServicoPorId(@PathVariable Long id_servico) {
-        return repository.findById(id_servico)
-                .map(servico -> ResponseEntity.ok(servico))
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    public Optional<Servico> getServicoPorId(@PathVariable Long id_servico) {
+        return repository.findById(id_servico);
     }
 
     // Lista por nome buscado
-    @GetMapping
+    @GetMapping(params = "nome")
     public ResponseEntity<?> buscarServicos(
             @RequestParam(required = false) String nome) {
 
@@ -60,17 +59,32 @@ public class ServicosController {
 
     // Cadastrar novo
     @PostMapping ("/cadastrar-servico")
-    public ResponseEntity<String> cadastrar(@RequestBody Servico novoServico) { // String é para momstrar a mensagem *
+    public ResponseEntity<Servico> cadastrar(@RequestBody ServicoDTO dto) { // String é para momstrar a mensagem *
         // * (Se necessário, mudar para Servico - que relaciona o objeto)
+
+
+
+        Servico novoServico = new Servico();
+        novoServico.setNomeServico(dto.nomeServico());
+        novoServico.setPrecoCusto(dto.precoCusto());
+        novoServico.setPrecoVenda(dto.precoVenda());
+        novoServico.setNomeServico(dto.nomeServico());
+
+        Servico servicoSalvo = repository.save(novoServico);
+        return ResponseEntity.ok(servicoSalvo);
+
+
+        //ANTIGA DEVOLUÇÃO DE RESPOSTA
+        //String mensagemCadastrado = "Serviço cadastrado com sucesso!";
+        //return new ResponseEntity<>(mensagemCadastrado, HttpStatus.CREATED);
+
 
         //Antigo modelo que cadastrava
         //Servico servicoSalvo = repository.save(novoServico);
         //return ResponseEntity.ok(servicoSalvo);
 
         // Novo modelo para mostrar mensagem
-        repository.save(novoServico);
-        String mensagemCadastrado = "Serviço cadastrado com sucesso!";
-        return new ResponseEntity<>(mensagemCadastrado, HttpStatus.CREATED);
+
     }
 
     // Deletar por ID
@@ -86,14 +100,14 @@ public class ServicosController {
 
     // Atualizar por ID
     @PutMapping("/{id_servico}")
-    public ResponseEntity<Servico> atualizarServico(@PathVariable Long id_servico, @RequestBody ServicoAtualizarDTO dto) {
+    public ResponseEntity<Servico> atualizarServico(@PathVariable Long id_servico, @RequestBody ServicoDTO dto) {
         return repository.findById(id_servico)
                 .map(servicoExistente -> {
                     // Atualiza apenas os campos que podem ser modificados
-                    servicoExistente.setNomeServico(dto.getNomeServico());
-                    servicoExistente.setPrecoCusto(dto.getPrecoCusto());
-                    servicoExistente.setPrecoVenda(dto.getPrecoVenda());
-                    servicoExistente.setStatusServico(dto.isStatusServico());
+                    servicoExistente.setNomeServico(dto.nomeServico());
+                    servicoExistente.setPrecoCusto(dto.precoCusto());
+                    servicoExistente.setPrecoVenda(dto.precoVenda());
+                    servicoExistente.setStatusServico(dto.statusServico());
 
                     Servico servicoSalvo = repository.save(servicoExistente);
                     return ResponseEntity.ok(servicoSalvo); // 200 OK
