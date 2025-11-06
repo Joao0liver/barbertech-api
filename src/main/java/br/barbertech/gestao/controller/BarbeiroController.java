@@ -1,5 +1,6 @@
 package br.barbertech.gestao.controller;
 
+import br.barbertech.gestao.dto.BarbeiroDto;
 import br.barbertech.gestao.entity.Barbeiro;
 import br.barbertech.gestao.repository.BarbeiroRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,25 +29,25 @@ public class BarbeiroController {
         return ResponseEntity.ok(barbeiroSalvo);
     }
 
-    @DeleteMapping("/barbeiros/{id_usuario}")
-    public ResponseEntity<Void> deletar(@PathVariable Long id_usuario) {
-        if (!repository.existsById(id_usuario)) {
+    @DeleteMapping("/barbeiros/{idUsuario}")
+    public ResponseEntity<Void> deletar(@PathVariable Long idUsuario) {
+        if (!repository.existsById(idUsuario)) {
             return ResponseEntity.notFound().build();
         }
 
-        repository.deleteById(id_usuario);
+        repository.deleteById(idUsuario);
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/barbeiro/{id_usuario}")
-    public ResponseEntity<Barbeiro> editar(@PathVariable Long id_usuario, @RequestBody Barbeiro dto) {
-        return repository.findById(id_usuario)
+    @PutMapping("/barbeiro/{idUsuario}")
+    public ResponseEntity<Barbeiro> editar(@PathVariable Long idUsuario, @RequestBody BarbeiroDto dto) {
+        return repository.findById(idUsuario)
                 .map(barbeiroExistente -> {
-                    barbeiroExistente.setNomeUsuario(dto.getNomeUsuario());
-                    barbeiroExistente.setCpfUsuario(dto.getCpfUsuario());
-                    barbeiroExistente.setTelefone(dto.getTelefone());
-                    barbeiroExistente.setSenha(dto.getSenha());
-                    barbeiroExistente.setStatusUsuario(1);
+                    barbeiroExistente.setNomeUsuario(dto.nomeUsuario());
+                    barbeiroExistente.setCpfUsuario(dto.cpfUsuario());
+                    barbeiroExistente.setTelefone(dto.telefone());
+                    barbeiroExistente.setSenha(dto.senha());
+                    barbeiroExistente.setStatusUsuario(0);
 
                     Barbeiro BarbeiroSalvo = repository.save(barbeiroExistente);
                     return ResponseEntity.ok(BarbeiroSalvo);
