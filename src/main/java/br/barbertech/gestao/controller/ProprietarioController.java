@@ -46,11 +46,11 @@ public class ProprietarioController {
     public ResponseEntity<Proprietario> editar(@PathVariable Long id_usuario, @RequestBody Proprietario dto) {
         return repository.findById(id_usuario)
                 .map(proprietarioExistente -> {
-                    proprietarioExistente.setNome_usuario(dto.getNome_usuario());
-                    proprietarioExistente.setCpf_usuario(dto.getCpf_usuario());
+                    proprietarioExistente.setNomeUsuario(dto.getNomeUsuario());
+                    proprietarioExistente.setCpfUsuario(dto.getCpfUsuario());
                     proprietarioExistente.setTelefone(dto.getTelefone());
                     proprietarioExistente.setSenha(dto.getSenha());
-                    proprietarioExistente.setStatus_usuario(1);
+                    proprietarioExistente.setStatusUsuario(1);
 
                     Proprietario proprietarioSalvo = repository.save(proprietarioExistente);
                     return ResponseEntity.ok(proprietarioSalvo);
