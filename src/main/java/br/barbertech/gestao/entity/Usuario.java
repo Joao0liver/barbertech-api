@@ -18,8 +18,10 @@ abstract class Usuario {
     @EqualsAndHashCode.Include
     private int idUsuario;
 
+    @Column (name = "nome_usuario")
     private String nomeUsuario;
 
+    @Column (name = "cpf_usuario")
     private String cpfUsuario;
 
     @Column (name = "tel_usuario")
@@ -30,6 +32,7 @@ abstract class Usuario {
     @Column(name = "nivel", insertable = false, updatable = false)
     private int nivel;
 
+    @Column (name = "status_usuario")
     private Integer statusUsuario;
 
     @PrePersist
