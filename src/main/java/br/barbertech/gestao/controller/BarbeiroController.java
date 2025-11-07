@@ -54,4 +54,16 @@ public class BarbeiroController {
                 })
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    @GetMapping("/id/{idUsuario}")
+    public ResponseEntity<Barbeiro> buscarid(@PathVariable Long idUsuario){
+
+        optional<Barbeiro> barbeiro = repository.findById(idUsuario);
+
+        if (barbeiro.isPresent()) {
+            return new ResponseEntity.ok(barbeiro.get());
+        } else {
+            return responseEntity.notFound().build();
+        }
+    }
 }
