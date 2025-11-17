@@ -74,8 +74,10 @@ public class Servico {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
+    @Column(name = "id_servico")
     private Long idServico; // Tipo 'id' (usando Long para o ID)
 
+    @Column(name = "nome_servico")
     private String nomeServico; // Tipo 'String'
 
     @Column(name = "preco_c_servico")

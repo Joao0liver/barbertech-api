@@ -12,8 +12,10 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RegistroCaixa {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     @Column(name = "id_caixa")
     private long idCaixa;
 
@@ -32,4 +34,5 @@ public class RegistroCaixa {
             dataCaixa = LocalDate.now();
         }
     }
+
 }
