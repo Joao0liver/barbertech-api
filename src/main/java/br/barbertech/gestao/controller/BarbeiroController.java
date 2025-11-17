@@ -11,25 +11,26 @@ import java.util.Arrays;
 import java.util.List;
 
 @RestController
+@RequestMapping("/barbeiros")
 public class BarbeiroController {
 
     @Autowired
     private BarbeiroRepository repository;
 
-    @GetMapping("/barbeiros")
+    @GetMapping
     public List<Barbeiro> listar() {
 
         return repository.findAll();
 
     }
 
-    @PostMapping("/cadastrar-barbeiros")
+    @PostMapping
     public ResponseEntity<Barbeiro> cadastrar(@RequestBody Barbeiro novoBarbeiro) {
         Barbeiro barbeiroSalvo = repository.save(novoBarbeiro);
         return ResponseEntity.ok(barbeiroSalvo);
     }
 
-    @DeleteMapping("/barbeiros/{idUsuario}")
+    @DeleteMapping("/{idUsuario}")
     public ResponseEntity<Void> deletar(@PathVariable Long idUsuario) {
         if (!repository.existsById(idUsuario)) {
             return ResponseEntity.notFound().build();
@@ -39,7 +40,7 @@ public class BarbeiroController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/barbeiro/{idUsuario}")
+    @PutMapping("/{idUsuario}")
     public ResponseEntity<Barbeiro> editar(@PathVariable Long idUsuario, @RequestBody BarbeiroDto dto) {
         return repository.findById(idUsuario)
                 .map(barbeiroExistente -> {

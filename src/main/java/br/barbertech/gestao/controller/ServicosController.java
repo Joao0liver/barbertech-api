@@ -20,15 +20,15 @@ public class ServicosController {
     private ServicoRepository repository;
 
     // Listar todos
-    @GetMapping ("")
+    @GetMapping("")
     public List<Servico> listar() {
         return repository.findAll();
     }
 
     // Listar 1 registro específico
-    @GetMapping("/{id_servico}")
-    public Optional<Servico> getServicoPorId(@PathVariable Long id_servico) {
-        return repository.findById(id_servico);
+    @GetMapping("/{idServico}")
+    public Optional<Servico> getServicoPorId(@PathVariable Long idServico) {
+        return repository.findById(idServico);
     }
 
     // Lista por nome buscado
@@ -58,7 +58,7 @@ public class ServicosController {
     }
 
     // Cadastrar novo
-    @PostMapping ("/cadastrar-servico")
+    @PostMapping
     public ResponseEntity<Servico> cadastrar(@RequestBody ServicoDTO dto) { // String é para momstrar a mensagem *
         // * (Se necessário, mudar para Servico - que relaciona o objeto)
 
@@ -88,26 +88,26 @@ public class ServicosController {
     }
 
     // Deletar por ID
-    @DeleteMapping("/{id_servico}")
-    public ResponseEntity<Void> deletarServico(@PathVariable Long id_servico) {
-        if (!repository.existsById(id_servico)) {
+    @DeleteMapping("/{idServico}")
+    public ResponseEntity<Void> deletarServico(@PathVariable Long idServico) {
+        if (!repository.existsById(idServico)) {
             return ResponseEntity.notFound().build(); // retorna erro se não existir o id
         }
 
-        repository.deleteById(id_servico);
+        repository.deleteById(idServico);
         return ResponseEntity.noContent().build(); // retorna 200
     }
 
     // Atualizar por ID
-    @PutMapping("/{id_servico}")
-    public ResponseEntity<Servico> atualizarServico(@PathVariable Long id_servico, @RequestBody ServicoDTO dto) {
-        return repository.findById(id_servico)
+    @PutMapping("/{idServico}")
+    public ResponseEntity<Servico> atualizarServico(@PathVariable Long idServico, @RequestBody ServicoDTO dto) {
+        return repository.findById(idServico)
                 .map(servicoExistente -> {
                     // Atualiza apenas os campos que podem ser modificados
                     servicoExistente.setNomeServico(dto.nomeServico());
                     servicoExistente.setPrecoCusto(dto.precoCusto());
                     servicoExistente.setPrecoVenda(dto.precoVenda());
-                    servicoExistente.setStatusServico(dto.statusServico());
+                    servicoExistente.setStatusServico(true);
 
                     Servico servicoSalvo = repository.save(servicoExistente);
                     return ResponseEntity.ok(servicoSalvo); // 200 OK

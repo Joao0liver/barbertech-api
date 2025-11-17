@@ -15,6 +15,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/registroCaixa")
 public class RegistroCaixaController {
+
     @Autowired
     private RegistroCaixaRepository repository;
 
@@ -25,13 +26,13 @@ public class RegistroCaixaController {
     }
 
     //Get específico por ID
-    @GetMapping("/{id_caixa}")
-    public Optional<RegistroCaixa> getCaixaPorId(@PathVariable Long id_caixa) {
-        return repository.findById(id_caixa);
+    @GetMapping("/{idCaixa}")
+    public Optional<RegistroCaixa> getCaixaPorId(@PathVariable Long idCaixa) {
+        return repository.findById(idCaixa);
     }
 
     //Cadastrar Registro
-    @PostMapping("/cadastrarRegistro")
+    @PostMapping
     public ResponseEntity<RegistroCaixa> cadastrar(@RequestBody RegistroCaixaDTO dto) {
 
         RegistroCaixa novoRegistro = new RegistroCaixa();
@@ -46,20 +47,20 @@ public class RegistroCaixaController {
     }
 
     //Deletar por ID
-    @DeleteMapping("/{id_caixa}")
-    public ResponseEntity<Void> deletarResgistroCaixa(@PathVariable Long id_caixa) {
-        if (!repository.existsById(id_caixa)) {
+    @DeleteMapping("/{idCaixa}")
+    public ResponseEntity<Void> deletarResgistroCaixa(@PathVariable Long idCaixa) {
+        if (!repository.existsById(idCaixa)) {
             return ResponseEntity.notFound().build();
         }
 
-        repository.deleteById(id_caixa);
+        repository.deleteById(idCaixa);
         return ResponseEntity.noContent().build();
     }
 
     //Atualizar registro
-    @PutMapping("/{id_caixa}")
-    public ResponseEntity<RegistroCaixa> atualizarRegistroCaixa(@PathVariable Long id_caixa, @RequestBody RegistroCaixaDTO dto) {
-        return repository.findById(id_caixa)
+    @PutMapping("/{idCaixa}")
+    public ResponseEntity<RegistroCaixa> atualizarRegistroCaixa(@PathVariable Long idCaixa, @RequestBody RegistroCaixaDTO dto) {
+        return repository.findById(idCaixa)
                 .map(registroExistente -> {
                     registroExistente.setIdUsuario(dto.idUsuario());
                     registroExistente.setIdItemCaixa(dto.idItemCaixa());
