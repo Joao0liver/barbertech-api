@@ -3,6 +3,8 @@ package br.barbertech.gestao.controller;
 import br.barbertech.gestao.dto.ProprietarioDto;
 import br.barbertech.gestao.entity.Proprietario;
 import br.barbertech.gestao.repository.ProprietarioRepository;
+import br.barbertech.gestao.service.ProprietarioService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,9 +12,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+@AllArgsConstructor
 @RestController
 @RequestMapping("/proprietarios")
 public class ProprietarioController {
+
+    private final ProprietarioService proprietarioService;
 
     @Autowired
     private ProprietarioRepository repository;
@@ -53,7 +58,7 @@ public class ProprietarioController {
         novoProprietario.setTelefone(dto.telefone());
         novoProprietario.setSenha(dto.senha());
 
-        Proprietario proprietarioSalvo = repository.save(novoProprietario);
+        Proprietario proprietarioSalvo = proprietarioService.salvar(novoProprietario);
         return ResponseEntity.ok(proprietarioSalvo);
     }
 
@@ -63,7 +68,7 @@ public class ProprietarioController {
             return ResponseEntity.notFound().build();
         }
 
-        repository.deleteById(idUsuario);
+        proprietarioService.excluir(idUsuario);
         return ResponseEntity.noContent().build();
     }
 
