@@ -2,12 +2,14 @@ package br.barbertech.gestao.controller;
 
 import br.barbertech.gestao.dto.ItemCaixaDto;
 import br.barbertech.gestao.entity.ItemCaixa;
+import br.barbertech.gestao.entity.Produto;
 import br.barbertech.gestao.repository.ItemCaixaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/itemCaixa")
@@ -19,6 +21,11 @@ public class ItemCaixaController {
     @GetMapping
     public List<ItemCaixa> listar() {
         return repository.findAll();
+    }
+
+    @GetMapping("/id/{idItemCaixa}")
+    public Optional<ItemCaixa> listarId(@PathVariable Long idItemCaixa) {
+        return repository.findById(idItemCaixa);
     }
 
     @PostMapping
