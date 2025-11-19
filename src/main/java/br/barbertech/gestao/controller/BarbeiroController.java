@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/barbeiros")
@@ -21,6 +22,26 @@ public class BarbeiroController {
     public List<Barbeiro> listar() {
 
         return repository.findAll();
+
+    }
+
+    @GetMapping("/nome/{nomeUsuario}")
+    public List<Barbeiro> buscarNome(@PathVariable String nomeUsuario) {
+
+        return repository.findByNomeUsuarioContaining(nomeUsuario);
+
+    }
+
+    @GetMapping("/id/{idUsuario}")
+    public ResponseEntity<Barbeiro> buscarId(@PathVariable Long idUsuario){
+
+        Optional<Barbeiro> barbeiro = repository.findById(idUsuario);
+
+        if (barbeiro.isPresent()) {
+            return ResponseEntity.ok(barbeiro.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
 
     }
 
