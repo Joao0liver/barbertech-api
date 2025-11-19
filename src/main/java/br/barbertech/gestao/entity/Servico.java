@@ -1,6 +1,7 @@
 package br.barbertech.gestao.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.*;
 
 //@Getter
@@ -77,12 +78,20 @@ public class Servico {
     @Column(name = "id_servico")
     private Long idServico; // Tipo 'id' (usando Long para o ID)
 
+    @NotBlank
+    @Size(min = 1, max = 255)
     @Column(name = "nome_servico")
     private String nomeServico; // Tipo 'String'
 
+    @NotNull
+    @DecimalMin(value = "0.01", message = "O preço de custo do serviço deve ser maior ou igual a 0.01!")
+    @DecimalMax(value = "10000.00", message = "O preço de custo do serviço deve ser menor ou igual a 10000.00!")
     @Column(name = "preco_c_servico")
     private double precoCusto; // Tipo 'double'
 
+    @NotNull
+    @DecimalMin(value = "0.01", message = "O preço de venda do serviço deve ser maior ou igual a 0.01!")
+    @DecimalMax(value = "10000.00", message = "O preço de venda do serviço deve ser menor ou igual a 10000.00!")
     @Column(name = "preco_v_servico")
     private double precoVenda; // Tipo 'double'
 

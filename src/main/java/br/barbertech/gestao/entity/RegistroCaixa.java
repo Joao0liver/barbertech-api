@@ -1,6 +1,9 @@
 package br.barbertech.gestao.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import java.time.LocalDate;
 
@@ -19,12 +22,16 @@ public class RegistroCaixa {
     @Column(name = "id_caixa")
     private long idCaixa;
 
+    @NotNull
     @Column(name = "id_usuario")
     private Integer idUsuario;
 
+    @NotNull
     @Column(name = "id_itemcaixa")
     private Integer idItemCaixa;
 
+    @NotNull
+    @FutureOrPresent
     @Column(name = "data_caixa")
     private LocalDate dataCaixa;
 
